@@ -1,0 +1,491 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Fathima Fidha — Portfolio Vol. 01</title>
+  <meta name="description" content="Fathima Fidha — backend developer and data science student at 42 Abu Dhabi and IIT Madras. A manga-style portfolio, chapter by chapter.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Comic+Neue:ital,wght@0,400;0,700;1,700&family=Dela+Gothic+One&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script>
+    // Apply saved ink mode before paint
+    try { if (localStorage.getItem('ink') === 'inverted') document.documentElement.dataset.ink = 'inverted'; } catch (e) {}
+    document.documentElement.classList.add('js');
+  </script>
+</head>
+<body>
+
+  <div class="progress" aria-hidden="true"><span id="progress"></span></div>
+
+  <!-- ===================== TOP BAR ===================== -->
+  <header class="topbar">
+    <a class="logo" href="#cover" aria-label="Back to cover">
+      <span class="logo-mark">FF</span>
+      <span class="logo-vol">VOL.01</span>
+    </a>
+    <nav class="nav" id="nav" aria-label="Chapters">
+      <a href="#ch1"><b>01</b> Origin</a>
+      <a href="#ch2"><b>02</b> Powers</a>
+      <a href="#ch3"><b>03</b> Arcs</a>
+      <a href="#ch4"><b>04</b> Training</a>
+      <a href="#bonus"><b>★</b> Bonus</a>
+      <a href="#ch5"><b>05</b> Contact</a>
+    </nav>
+    <div class="topbar-actions">
+      <button class="trophy" id="trophyBtn" type="button" aria-expanded="false" aria-controls="trophyList" title="Achievements">
+        <span aria-hidden="true">★</span><b id="trophyCount">0</b><i class="of">/8</i>
+      </button>
+      <button class="ink-toggle" id="soundToggle" type="button" aria-pressed="false" aria-label="Sound effects" title="Sound effects">
+        <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+          <path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor"/>
+          <path class="snd-on" d="M16 9a4 4 0 0 1 0 6M18.5 6.5a7.5 7.5 0 0 1 0 11" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+          <path class="snd-off" d="M16 9l5 6M21 9l-5 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+        </svg>
+      </button>
+      <button class="ink-toggle" id="inkToggle" type="button" aria-label="Invert ink colors" title="Invert ink">
+        <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2.5"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"/></svg>
+      </button>
+      <button class="menu-btn" id="menuBtn" type="button" aria-label="Open chapter menu" aria-expanded="false" aria-controls="nav">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div class="trophy-list" id="trophyList" hidden>
+      <h3>Achievements</h3>
+      <ul id="trophyItems"></ul>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ===================== COVER ===================== -->
+    <section id="cover" class="cover">
+      <div class="panel cover-panel">
+        <div class="speedlines" aria-hidden="true"></div>
+
+        <div class="cover-meta">
+          <span>VOL. 01</span>
+          <span class="cover-meta-mid">THE DEVELOPER CHRONICLES</span>
+          <span>ABU DHABI, UAE</span>
+        </div>
+
+        <div class="cover-grid">
+          <div class="cover-text">
+            <p class="title-kicker">The Legend of</p>
+            <h1 class="title">FATHIMA<br>FIDHA</h1>
+            <div class="caption caption--cover">
+              Backend Developer · Data Science Student · 42 Abu Dhabi Cadet
+            </div>
+            <div class="cover-ctas">
+              <a class="btn btn--ink" href="#ch1">Start Reading ➜</a>
+              <a class="btn" href="#ch3">Skip to the Arcs</a>
+            </div>
+          </div>
+
+          <div class="cover-figure">
+            <div class="bubble bubble--hero bubble--tail-bl" id="heroBubble" role="button" tabindex="0">
+              <p id="typeTarget" aria-live="polite">Hi! I build secure backends, dig insights out of data, and survive C segfaults. Ready for my story?</p>
+              <span class="bubble-hint">▶ tap for more</span>
+            </div>
+            <!-- EDIT: swap this silhouette for <img class="hero-photo" src="you.jpg" alt="Fathima Fidha"> -->
+            <svg class="silhouette" viewBox="0 0 300 360" role="img" aria-label="Mysterious character silhouette">
+              <path d="M10 360 C22 288 88 256 150 254 C212 256 278 288 290 360 Z" />
+              <rect x="126" y="200" width="48" height="70" />
+              <ellipse cx="150" cy="160" rx="62" ry="74" />
+              <polygon points="84,176 70,118 36,104 82,90 66,44 112,66 120,14 148,54 178,8 188,60 232,30 220,80 268,86 230,112 222,176 206,126 176,110 146,124 116,112 98,136" />
+              <g class="eyes">
+                <polygon class="eye" points="110,166 140,158 138,170 112,174" />
+                <polygon class="eye" points="160,158 190,166 188,174 162,170" />
+              </g>
+            </svg>
+            <div class="burst burst--cover" aria-hidden="true"><span>ドン!</span></div>
+          </div>
+        </div>
+
+        <p class="vertical-jp" aria-hidden="true">開発者の物語</p>
+        <div class="barcode" aria-hidden="true"><i></i><small>978-0-DEV-2026</small></div>
+        <span class="page-num">— 01 —</span>
+      </div>
+    </section>
+
+    <!-- ===================== CHAPTER 1: ABOUT ===================== -->
+    <section id="ch1" class="chapter">
+      <header class="chapter-head reveal">
+        <span class="ch-num">Chapter 01</span>
+        <h2>Origin Story</h2>
+        <span class="ch-jp" aria-hidden="true">始まり</span>
+      </header>
+
+      <div class="grid grid--about">
+        <div class="panel area-a reveal">
+          <div class="caption">It all began with a blinking cursor… and it still blinks. Go on, type something.</div>
+          <div class="screen terminal" id="terminal">
+            <div class="term-out" id="termOut" aria-live="polite">
+              <code class="cmd"><span class="prompt">$</span> python3 -c 'print("Hello, World!")'</code>
+              <code class="out">Hello, World!</code>
+              <code class="hint">Type <b>help</b> and press Enter ↵</code>
+            </div>
+            <form class="term-line" id="termForm" autocomplete="off">
+              <label for="termIn" class="prompt">fathima@42:~$</label>
+              <input id="termIn" type="text" spellcheck="false" autocapitalize="off" enterkeyhint="send">
+            </form>
+          </div>
+          <div class="sfx sfx--small" aria-hidden="true">カチ カチ</div>
+        </div>
+
+        <div class="panel area-b panel--tone reveal">
+          <div class="portrait">
+            <!-- EDIT: replace with <img src="you.jpg" alt="Fathima Fidha"> -->
+            <div class="portrait-ph" aria-hidden="true">?</div>
+          </div>
+          <div class="bubble bubble--small bubble--tail-tr">That's me!</div>
+          <div class="nametag">
+            <strong>FATHIMA FIDHA</strong>
+            <span>Developer · Abu Dhabi, UAE</span>
+          </div>
+        </div>
+
+        <div class="panel area-c reveal">
+          <div class="caption">Then she enrolled in two schools at once…</div>
+          <p class="prose">
+            …training in software development at 42 Abu Dhabi while earning a Bachelor in Data Science
+            at IIT Madras. Along the way she built backend microservices, a multi-client IRC server, a 3D
+            raycasting engine and data-analysis pipelines — working in Python, SQL, C/C++ and Node.js, from
+            raw sockets all the way up to dashboards.
+          </p>
+          <div class="bubble bubble--tail-bl bubble--inline">
+            My mission? Build intelligent systems with AI and machine learning, on code that's solid and secure.
+          </div>
+        </div>
+
+        <div class="panel area-d panel--ink reveal">
+          <div class="stat"><b data-count="3">0</b><span>+ Years Training</span></div>
+          <div class="stat"><b data-count="6">0</b><span>+ Projects Cleared</span></div>
+          <div class="stat"><b data-count="2">0</b><span>Schools at Once</span></div>
+          <div class="stat"><b>∞</b><span>Segfaults Survived</span></div>
+        </div>
+      </div>
+      <span class="page-num">— 02 —</span>
+    </section>
+
+    <!-- ===================== CHAPTER 2: SKILLS ===================== -->
+    <section id="ch2" class="chapter">
+      <header class="chapter-head reveal">
+        <span class="ch-num">Chapter 02</span>
+        <h2>Power Levels</h2>
+        <span class="ch-jp" aria-hidden="true">力</span>
+      </header>
+
+      <div class="grid grid--skills">
+        <div class="panel area-profile reveal">
+          <h3 class="panel-title">Character Sheet</h3>
+          <dl class="sheet">
+            <div><dt>Class</dt><dd>Backend &amp; Data Mage</dd></div>
+            <div><dt>Element</dt><dd>Python 🐍 · C ⚙️</dd></div>
+            <div><dt>Guild</dt><dd>42 Abu Dhabi</dd></div>
+            <div><dt>Academy</dt><dd>IIT Madras</dd></div>
+            <div><dt>Weapon</dt><dd>Linux terminal + Git</dd></div>
+            <div><dt>Rank</dt><dd class="rank">S</dd></div>
+          </dl>
+        </div>
+
+        <div class="panel area-bars reveal">
+          <h3 class="panel-title">Stats</h3>
+          <!-- EDIT: skills + levels (0–100) -->
+          <ul class="bars">
+            <li style="--lv:86"><span>Python</span><div class="bar"><i></i></div><em>LV 86</em></li>
+            <li style="--lv:82"><span>C / C++</span><div class="bar"><i></i></div><em>LV 82</em></li>
+            <li style="--lv:80"><span>SQL / PostgreSQL</span><div class="bar"><i></i></div><em>LV 80</em></li>
+            <li style="--lv:78"><span>Node.js / APIs</span><div class="bar"><i></i></div><em>LV 78</em></li>
+            <li style="--lv:76"><span>Pandas / NumPy</span><div class="bar"><i></i></div><em>LV 76</em></li>
+            <li style="--lv:72"><span>Linux / Docker</span><div class="bar"><i></i></div><em>LV 72</em></li>
+            <li style="--lv:58"><span>JS / React</span><div class="bar"><i></i></div><em>LV 58</em></li>
+          </ul>
+          <h3 class="panel-title inv-title">Inventory</h3>
+          <ul class="tags">
+            <li>Bash</li><li>Git</li><li>Docker</li><li>Matplotlib</li><li>Power BI</li><li>Excel</li>
+            <li>REST APIs</li><li>Microservices</li><li>ML Fundamentals</li><li>Cloud Basics</li><li>VS Code</li>
+          </ul>
+        </div>
+
+        <div class="moves area-moves">
+          <article class="panel move reveal" data-sfx="ガキン!">
+            <span class="move-kanji" aria-hidden="true">守</span>
+            <h3><button class="move-trigger" type="button" aria-expanded="false">Auth Fortress</button></h3>
+            <p class="move-front">An impenetrable wall of authentication around every API.</p>
+            <p class="move-back">JWT sessions · Google OAuth · password reset · 2FA · role-based access control. First used in <b>the Quillow Arc</b>.</p>
+            <span class="move-tap move-front" aria-hidden="true">▶ Tap to use move</span>
+            <span class="move-tap move-back" aria-hidden="true">▶ Tap to reset</span>
+          </article>
+          <article class="panel move reveal" data-sfx="ズバババ!">
+            <span class="move-kanji" aria-hidden="true">繋</span>
+            <h3><button class="move-trigger" type="button" aria-expanded="false">Socket Storm</button></h3>
+            <p class="move-front">Serve a crowd of clients at once without ever blocking.</p>
+            <p class="move-back">TCP sockets · non-blocking I/O · multiplexing · real-time message routing. First used in <b>the IRC Server Saga</b>.</p>
+            <span class="move-tap move-front" aria-hidden="true">▶ Tap to use move</span>
+            <span class="move-tap move-back" aria-hidden="true">▶ Tap to reset</span>
+          </article>
+          <article class="panel move reveal" data-sfx="キラーン!">
+            <span class="move-kanji" aria-hidden="true">析</span>
+            <h3><button class="move-trigger" type="button" aria-expanded="false">Data Divination</button></h3>
+            <p class="move-front">Read the future hidden inside a messy dataset.</p>
+            <p class="move-back">Data cleaning · EDA with Pandas &amp; SQL · Matplotlib charts · Power BI dashboards. First used in <b>the COVID-19 Data Files</b>.</p>
+            <span class="move-tap move-front" aria-hidden="true">▶ Tap to use move</span>
+            <span class="move-tap move-back" aria-hidden="true">▶ Tap to reset</span>
+          </article>
+        </div>
+      </div>
+      <span class="page-num">— 03 —</span>
+    </section>
+
+    <!-- ===================== CHAPTER 3: PROJECTS ===================== -->
+    <section id="ch3" class="chapter">
+      <header class="chapter-head reveal">
+        <span class="ch-num">Chapter 03</span>
+        <h2>Story Arcs</h2>
+        <span class="ch-jp" aria-hidden="true">物語</span>
+      </header>
+
+      <div class="filters" role="group" aria-label="Filter story arcs">
+        <span class="filters-label">Filter:</span>
+        <button class="filter" type="button" data-filter="all" aria-pressed="true">All</button>
+        <button class="filter" type="button" data-filter="backend" aria-pressed="false">Backend</button>
+        <button class="filter" type="button" data-filter="systems" aria-pressed="false">Systems</button>
+        <button class="filter" type="button" data-filter="data" aria-pressed="false">Data</button>
+      </div>
+
+      <!-- EDIT: point each "Code" link at the project's repo -->
+      <div class="grid grid--projects">
+        <article class="panel project area-p1 reveal" data-cat="backend" data-key="quillow">
+          <div class="art art--lines"><span>ARC<br>01</span></div>
+          <div class="project-body">
+            <h3>The Quillow Arc</h3>
+            <p>Backend microservices for a collaborative diary platform (ft_transcendence): JWT login, Google OAuth, password reset and 2FA, secure REST APIs, and role-based access control on PostgreSQL.</p>
+            <ul class="tags"><li>Node.js</li><li>PostgreSQL</li><li>OAuth / JWT</li><li>Microservices</li></ul>
+            <div class="project-more" hidden>
+              <p class="arc-meta">Dec 2025 – Mar 2026 · Team project · Backend Developer</p>
+              <ul class="arc-points">
+                <li>Developed backend microservices for a collaborative diary platform using Node.js and PostgreSQL.</li>
+                <li>Implemented authentication: JWT login, Google OAuth, password reset and 2FA flows.</li>
+                <li>Built secure REST APIs for user management, diary operations and collaboration workflows.</li>
+                <li>Designed relational database structures, validation rules and role-based access control.</li>
+                <li>Worked in a team using a Git workflow, sprint planning, debugging and technical documentation.</li>
+              </ul>
+            </div>
+            <div class="project-links">
+              <button class="btn btn--ink btn--sm open-arc" type="button">Read File ➜</button>
+              <a href="https://github.com/fkuruthl" target="_blank" rel="noopener" class="btn btn--sm">Code</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="panel project area-p2 reveal" data-cat="backend systems" data-key="irc">
+          <div class="art art--dots"><span>ARC<br>02</span></div>
+          <div class="project-body">
+            <h3>The IRC Server Saga</h3>
+            <p>A multi-client IRC server in C++ with TCP sockets and non-blocking I/O. It handles authentication, channels and real-time message routing.</p>
+            <ul class="tags"><li>C++</li><li>TCP Sockets</li><li>Networking</li></ul>
+            <div class="project-more" hidden>
+              <p class="arc-meta">Network programming · 42 Abu Dhabi</p>
+              <ul class="arc-points">
+                <li>Built a multi-client IRC server in C++ using TCP sockets and non-blocking I/O.</li>
+                <li>Implemented authentication, client management, channels and real-time message routing.</li>
+                <li>Used multiplexing and concurrent connection handling to serve many users efficiently.</li>
+                <li>Deepened my understanding of networking, server architecture and system performance.</li>
+              </ul>
+            </div>
+            <div class="project-links">
+              <button class="btn btn--ink btn--sm open-arc" type="button">Read File ➜</button>
+              <a href="https://github.com/fkuruthl" target="_blank" rel="noopener" class="btn btn--sm">Code</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="panel project area-p3 reveal" data-cat="systems" data-key="cub3d">
+          <div class="art art--hatch"><span>ARC<br>03</span></div>
+          <div class="project-body">
+            <h3>Cub3D: Into the Maze</h3>
+            <p>A 3D raycasting engine in C with MiniLibX. It covers rendering, player movement, collision detection and map parsing.</p>
+            <ul class="tags"><li>C</li><li>MiniLibX</li><li>Graphics</li></ul>
+            <div class="project-more" hidden>
+              <p class="arc-meta">Graphics &amp; algorithms · 42 Abu Dhabi</p>
+              <ul class="arc-points">
+                <li>Developed a 3D raycasting engine in C using MiniLibX.</li>
+                <li>Implemented rendering logic, player movement, collision detection and map parsing.</li>
+                <li>Sharpened algorithmic thinking and optimization through graphics and performance work.</li>
+              </ul>
+            </div>
+            <div class="project-links">
+              <button class="btn btn--ink btn--sm open-arc" type="button">Read File ➜</button>
+              <a href="https://github.com/fkuruthl" target="_blank" rel="noopener" class="btn btn--sm">Code</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="panel project area-p4 reveal" data-cat="data" data-key="covid">
+          <div class="art art--cross"><span>ARC<br>04</span></div>
+          <div class="project-body">
+            <h3>The COVID-19 Data Files</h3>
+            <p>Cleaned and explored global COVID-19 data to compare case trends, recovery rates and country-by-country performance, then presented the findings as charts.</p>
+            <ul class="tags"><li>Python</li><li>Pandas</li><li>SQL</li><li>Matplotlib</li></ul>
+            <div class="project-more" hidden>
+              <p class="arc-meta">Data analytics &amp; visualization</p>
+              <ul class="arc-points">
+                <li>Performed data cleaning, preprocessing and exploratory data analysis with Python, Pandas and SQL.</li>
+                <li>Analyzed global case trends, recovery rates and country-wise performance on structured datasets.</li>
+                <li>Created analytical visualizations with Matplotlib and extracted data-driven insights.</li>
+                <li>Strengthened reporting, data validation and dashboard-style analytical workflows.</li>
+              </ul>
+            </div>
+            <div class="project-links">
+              <button class="btn btn--ink btn--sm open-arc" type="button">Read File ➜</button>
+              <a href="https://github.com/fkuruthl" target="_blank" rel="noopener" class="btn btn--sm">Code</a>
+            </div>
+          </div>
+        </article>
+      </div>
+      <span class="page-num">— 04 —</span>
+    </section>
+
+    <!-- ===================== CHAPTER 4: EXPERIENCE ===================== -->
+    <section id="ch4" class="chapter">
+      <header class="chapter-head reveal">
+        <span class="ch-num">Chapter 04</span>
+        <h2>Training Arc</h2>
+        <span class="ch-jp" aria-hidden="true">修行</span>
+      </header>
+
+      <ol class="timeline">
+        <li class="t-row reveal">
+          <div class="panel panel--ink t-year">2025<small>Dec — Mar '26</small></div>
+          <div class="panel t-body">
+            <div class="caption">Episode 3 · The Team Raid</div>
+            <h3>Backend Developer <span>@ ft_transcendence (Quillow)</span></h3>
+            <p>Built the authentication and user-management microservices (JWT, Google OAuth, 2FA) and designed the relational schema, validation rules and role-based access. Worked in a team with a Git workflow, sprint planning and technical documentation.</p>
+          </div>
+        </li>
+        <li class="t-row reveal">
+          <div class="panel panel--ink t-year">2023<small>— now</small></div>
+          <div class="panel t-body">
+            <div class="caption">Episode 2 · The Dojo</div>
+            <h3>Software Development Trainee <span>@ 42 Abu Dhabi</span></h3>
+            <p>Built minishell, push_swap, an IRC server, Cub3D and other C/C++ projects covering algorithms, networking and low-level programming. Peer code reviews built habits around debugging, optimization and clean code.</p>
+          </div>
+        </li>
+        <li class="t-row reveal">
+          <div class="panel panel--ink t-year">2023<small>— now</small></div>
+          <div class="panel t-body">
+            <div class="caption">Episode 1 · The Parallel Path</div>
+            <h3>Bachelor in Data Science <span>@ IIT Madras</span></h3>
+            <p>Studying statistics, data analytics and machine learning fundamentals, the foundation for my work in AI and intelligent systems.</p>
+          </div>
+        </li>
+      </ol>
+      <span class="page-num">— 05 —</span>
+    </section>
+
+    <!-- ===================== BONUS: BUG HUNT ===================== -->
+    <section id="bonus" class="chapter">
+      <header class="chapter-head reveal">
+        <span class="ch-num">Side Story</span>
+        <h2>Bug Hunt</h2>
+        <span class="ch-jp" aria-hidden="true">虫退治</span>
+      </header>
+
+      <div class="panel game reveal">
+        <div class="game-hud">
+          <div class="caption">Squash as many bugs as you can in 20 seconds. Red <b>SEGV</b> bugs are worth 3!</div>
+          <dl class="hud">
+            <div><dt>Score</dt><dd id="gScore">0</dd></div>
+            <div><dt>Time</dt><dd id="gTime">20</dd></div>
+            <div><dt>Best</dt><dd id="gBest">0</dd></div>
+          </dl>
+        </div>
+        <div class="game-area" id="gameArea">
+          <div class="game-screen" id="gameScreen">
+            <p class="game-title" aria-hidden="true">虫退治</p>
+            <p id="gameMsg" aria-live="polite">Production is on fire. Only you can debug it.</p>
+            <button class="btn btn--ink btn--big" id="gameStart" type="button">Start Debugging ➜</button>
+          </div>
+        </div>
+      </div>
+      <span class="page-num">— 06 —</span>
+    </section>
+
+    <!-- ===================== CHAPTER 5: CONTACT ===================== -->
+    <section id="ch5" class="chapter">
+      <header class="chapter-head reveal">
+        <span class="ch-num">Final Chapter</span>
+        <h2>Team Up?</h2>
+        <span class="ch-jp" aria-hidden="true">仲間</span>
+      </header>
+
+      <div class="panel contact-panel reveal">
+        <div class="speedlines speedlines--soft" aria-hidden="true"></div>
+        <div class="burst burst--contact" aria-hidden="true"><span>!!</span></div>
+
+        <div class="contact-grid">
+          <div class="contact-pitch">
+            <div class="bubble bubble--tail-bl bubble--big">
+              Every hero needs a party. Have an internship, a backend or data role, or an AI idea? Let's start the next arc together!
+            </div>
+            <!-- EDIT: set your email here AND in data-email on the form below -->
+            <div class="stamps">
+              <a class="stamp" href="mailto:you@example.com">Email</a>
+              <a class="stamp" href="https://github.com/fkuruthl" target="_blank" rel="noopener">GitHub</a>
+              <a class="stamp" href="https://linkedin.com/in/fathima-fidha-a3914323a" target="_blank" rel="noopener">LinkedIn</a>
+              <a class="stamp" href="Fathima_Fidha_Resume.pdf" download>Résumé</a>
+            </div>
+          </div>
+
+          <form class="contact-form" id="contactForm" data-email="you@example.com">
+            <label>
+              <span>Your name</span>
+              <input name="name" required autocomplete="name" placeholder="The Protagonist">
+            </label>
+            <label>
+              <span>Your email</span>
+              <input name="email" type="email" required autocomplete="email" placeholder="hero@guild.com">
+            </label>
+            <label>
+              <span>Your message</span>
+              <textarea name="message" rows="4" required placeholder="I have a quest for you…"></textarea>
+            </label>
+            <button class="btn btn--ink btn--big" type="submit">Send Message ➜</button>
+            <p class="form-note" id="formNote" role="status"></p>
+          </form>
+        </div>
+      </div>
+      <span class="page-num">— 07 —</span>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p class="fin">— To be continued… —</p>
+    <p class="footer-small">© <span id="year">2026</span> Fathima Fidha · Inked with HTML, CSS &amp; JavaScript</p>
+    <p class="footer-small footer-keys">Click anywhere for SFX · <kbd>J</kbd>/<kbd>K</kbd> flip pages · <kbd>1</kbd>–<kbd>5</kbd> jump to a chapter · some secrets need an ancient code…</p>
+  </footer>
+
+  <!-- Story arc reader -->
+  <dialog class="arc-modal" id="arcModal" aria-labelledby="arcTitle">
+    <div class="arc-modal-inner">
+      <button class="arc-close" id="arcClose" type="button" aria-label="Close">✕</button>
+      <span class="ch-num" id="arcNum">ARC 01</span>
+      <h3 id="arcTitle"></h3>
+      <div id="arcBody"></div>
+      <div class="arc-foot">
+        <div id="arcLinks"></div>
+        <div class="arc-pager">
+          <button class="btn btn--sm" id="arcPrev" type="button">◀ Prev</button>
+          <button class="btn btn--sm btn--ink" id="arcNext" type="button">Next ▶</button>
+        </div>
+      </div>
+    </div>
+  </dialog>
+
+  <div class="toasts" id="toasts" role="status" aria-live="polite"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
