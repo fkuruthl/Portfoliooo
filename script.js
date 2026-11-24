@@ -31,12 +31,16 @@
     o.start(t);
     o.stop(t + dur + 0.02);
   };
-  const sfx = type => {
+  const NOTES = [330, 392, 494, 587];
+  const sfx = (type, arg) => {
     if (!soundOn) return;
     try {
       actx = actx || new (window.AudioContext || window.webkitAudioContext)();
       if (actx.state === 'suspended') actx.resume();
       if (type === 'pop') tone(620, 160, 0.12);
+      else if (type === 'note') tone(NOTES[arg] || 440, NOTES[arg] || 440, 0.22, 'triangle', 0.08);
+      else if (type === 'slash') { tone(2400, 300, 0.14, 'sawtooth', 0.05); tone(180, 60, 0.2, 'square', 0.05); }
+      else if (type === 'buzz') tone(140, 90, 0.35, 'sawtooth', 0.07);
       else if (type === 'splat') { tone(320, 50, 0.18, 'sawtooth', 0.08); tone(900, 200, 0.06, 'square', 0.03); }
       else if (type === 'key') tone(1200, 900, 0.025, 'square', 0.02);
       else if (type === 'chime') [660, 880, 1320].forEach((f, i) => tone(f, f, 0.16, 'triangle', 0.08, i * 0.09));
@@ -69,7 +73,7 @@
     document.body.appendChild(pop);
     setTimeout(() => pop.remove(), 900);
   };
-  const NO_POP = 'input, textarea, select, label, .terminal, .game-area, .move, dialog, .trophy-list, .trophy, #soundToggle';
+  const NO_POP = 'input, textarea, select, label, .terminal, .game-area, .minigames, .move, dialog, .trophy-list, .trophy, #soundToggle';
   document.addEventListener('click', e => {
     if (e.detail === 0 || e.target.closest(NO_POP)) return; // skip keyboard clicks & interactive widgets
     popWord(e.clientX, e.clientY, words[Math.floor(Math.random() * words.length)]);
@@ -81,9 +85,12 @@
      ========================================================= */
   const ACH = [
     { id: 'hacker', name: 'Hacker Voice', desc: 'Run a command in the terminal.' },
-    { id: 'combo', name: 'Combo Master', desc: 'Use all three special moves.' },
+    { id: 'combo', name: 'Combo Master', desc: 'Use all four special moves.' },
     { id: 'archivist', name: 'Archivist', desc: 'Open a story arc file.' },
+    { id: 'moei', name: 'Mission Briefing', desc: 'Read the MOEI mission file.' },
     { id: 'slayer', name: 'Bug Slayer', desc: 'Squash 10+ bugs in one round.' },
+    { id: 'samurai', name: 'Fastest Draw', desc: 'Win a duel in under 250 ms.' },
+    { id: 'pipeline', name: 'Pipeline Pro', desc: 'Clear level 6 in Deploy Combo.' },
     { id: 'ink', name: 'Ink Master', desc: 'Invert the ink.' },
     { id: 'finale', name: 'To Be Continued', desc: 'Read to the very last page.' },
     { id: 'root', name: 'Root Access', desc: 'Find the one sudo command that works.', secret: true },
@@ -96,6 +103,7 @@
 
   const renderAch = () => {
     $('#trophyCount').textContent = unlocked.size;
+    $('#trophyBtn .of').textContent = '/' + ACH.length;
     trophyBtn.setAttribute('aria-label', `Achievements: ${unlocked.size} of ${ACH.length} unlocked`);
     $('#trophyItems').innerHTML = ACH.map(a => {
       const got = unlocked.has(a.id);
@@ -216,11 +224,12 @@
   const bubble = $('#heroBubble');
   const typeTarget = $('#typeTarget');
   const lines = [
-    'Hi! I build secure backends, dig insights out of data, and survive C segfaults. Ready for my story?',
-    'Psst… the terminal in Chapter 01 actually works. Try typing help.',
-    'I study at 42 Abu Dhabi and IIT Madras at the same time. Sleep is a side quest.',
-    'Rumor says a swarm of bugs is hiding near the end of this volume…',
-    'Collect all 8 achievements. The ★ counter at the top is watching.',
+    "Hi! I'm a Forward Deployed Engineer at MOEI. I go where the problem is and ship the fix. Ready for my story?",
+    'Forward Deployed = I sit with the people who use the software, then build exactly what they need.',
+    'Psst… the terminal in Chapter 01 actually works. Try typing help, or moei.',
+    'I also study at 42 Abu Dhabi and IIT Madras. Sleep is a side quest.',
+    'Three mini-games are hiding near the end of this volume. Think you can beat my scores?',
+    `Collect all ${ACH.length} achievements. The ★ counter at the top is watching.`,
     'Okay, okay — scroll down already! The story is waiting.'
   ];
   let lineIdx = 0;
@@ -290,7 +299,7 @@
       popWord(r.left + r.width / 2, r.top + r.height / 2, card.dataset.sfx, true);
       sfx('power');
       usedMoves.add(i);
-      if (usedMoves.size === 3) unlock('combo');
+      if (usedMoves.size === $$('.move').length) unlock('combo');
     });
   });
 
@@ -333,6 +342,7 @@
     }
     sfx('pop');
     unlock('archivist');
+    if (p.dataset.key === 'moei') unlock('moei');
   };
   const closeModal = () => { if (typeof modal.close === 'function') modal.close(); else modal.removeAttribute('open'); };
   projects.forEach((p, i) => {
@@ -409,11 +419,24 @@
 <b>education</b>   training grounds
 <b>contact</b>     how to reach me
 <b>goto</b> &lt;ch&gt;   jump to a chapter (1-5, bonus)
-<b>game</b>        play Bug Hunt
+<b>moei</b>        my current mission
+<b>game</b>        play the side quests
 <b>ink</b> · <b>sound</b> toggle ink / sound
 <b>clear</b>       clear the screen
 …and a few secrets 👀 (try <b>hint</b>)`),
-    whoami: () => print('Fathima Fidha — backend developer &amp; data science student.\n42 Abu Dhabi · Bachelor in Data Science @ IIT Madras · Abu Dhabi, UAE'),
+    whoami: () => print('Fathima Fidha — Forward Deployed Engineer @ MOEI (UAE Ministry of Energy &amp; Infrastructure).\nBackend developer · 42 Abu Dhabi · Bachelor in Data Science @ IIT Madras · Abu Dhabi, UAE'),
+    moei: () => {
+      print(
+`<b>CURRENT MISSION</b> ── UAE Ministry of Energy &amp; Infrastructure
+role      Forward Deployed Engineer
+status    <span class="ok">● deployed</span>
+loadout   discovery · rapid prototyping · integrations · AI &amp; data · production support
+briefing  embedded with ministry teams, turning real needs into shipped software
+
+Opening the mission file…`);
+      const i = projects.findIndex(p => p.dataset.key === 'moei');
+      if (i >= 0) setTimeout(() => openProject(i), 700);
+    },
     skills: () => print($$('.bars li').map(li => {
       const name = $('span', li).textContent.padEnd(17, ' ');
       const lv = parseInt(li.style.getPropertyValue('--lv'), 10) || 0;
@@ -438,7 +461,7 @@
       print(`→ jumping to ${id === 'cover' ? 'the cover' : id === 'bonus' ? 'the bonus chapter' : 'chapter ' + id.slice(2)}…`);
       setTimeout(() => scrollToId(id), 350);
     },
-    game: () => { print('Loading Bug Hunt… 🐛'); setTimeout(() => scrollToId('bonus'), 350); },
+    game: () => { print('Loading side quests: Bug Hunt 🐛 · Quick-Draw Duel ⚔ · Deploy Combo 🚀'); setTimeout(() => scrollToId('bonus'), 350); },
     ink: () => { toggleInk(); print('Ink inverted. 🖋️'); },
     sound: () => { soundBtn.click(); print(`Sound ${soundOn ? 'on 🔊' : 'off 🔇'}`); },
     clear: () => { termOut.innerHTML = ''; },
@@ -465,7 +488,7 @@
     },
     rm: () => print('rm: permission denied — this volume is protected by plot armor.', 'err')
   };
-  const ALIASES = { cat: 'open', dir: 'ls', projects: 'ls', cd: 'goto', man: 'help', '?': 'help', about: 'whoami', play: 'game', hello: 'hi', hey: 'hi', cls: 'clear', theme: 'ink' };
+  const ALIASES = { cat: 'open', dir: 'ls', projects: 'ls', cd: 'goto', man: 'help', '?': 'help', about: 'whoami', play: 'game', games: 'game', duel: 'game', combo: 'game', mission: 'moei', fde: 'moei', work: 'moei', hello: 'hi', hey: 'hi', cls: 'clear', theme: 'ink' };
 
   const run = raw => {
     const line = raw.trim();
@@ -638,6 +661,178 @@
     };
     startBtn.addEventListener('click', start);
     document.addEventListener('visibilitychange', () => { if (document.hidden && running) end(); });
+  }
+
+  /* =========================================================
+     QUICK-DRAW DUEL (reaction game)
+     ========================================================= */
+  const duel = $('#duelStage');
+  if (duel) {
+    const sign = $('#duelSign');
+    const dMsg = $('#duelMsg');
+    const elLast = $('#duelLast');
+    const elBest = $('#duelBest');
+    const elWins = $('#duelWins');
+    let state = 'idle'; // idle → wait → go → done
+    let t0 = 0;
+    let timer = 0;
+    let rival = 0;
+    let best = store.get('bestDuel', 0);
+    let wins = store.get('duelWins', 0);
+    elBest.textContent = best ? best + 'ms' : '—';
+    elWins.textContent = wins;
+
+    const setStage = (cls, s, m) => {
+      duel.dataset.state = cls;
+      sign.textContent = s;
+      dMsg.textContent = m;
+    };
+    const go = () => {
+      state = 'go';
+      rival = Math.round(210 + Math.random() * 130); // rival reflexes: 210–340 ms
+      t0 = performance.now();
+      setStage('go', '!', 'DRAW!');
+      sfx('pop');
+      timer = setTimeout(() => {
+        if (state !== 'go') return;
+        state = 'done';
+        setStage('lose', '✕', `Too slow… the rival struck in ${rival}ms. Tap to duel again.`);
+        sfx('buzz');
+      }, 1500);
+    };
+    const begin = () => {
+      state = 'wait';
+      setStage('wait', '…', 'Steady… wait for it…');
+      timer = setTimeout(go, 1300 + Math.random() * 2700);
+    };
+    const strike = () => {
+      if (state === 'idle' || state === 'done') return begin();
+      clearTimeout(timer);
+      if (state === 'wait') {
+        state = 'done';
+        setStage('lose', '✕', 'Too early! Dishonor! Tap to try again.');
+        sfx('buzz');
+        if (!reduceMotion) { duel.classList.remove('shake'); void duel.offsetWidth; duel.classList.add('shake'); }
+        return;
+      }
+      // state === 'go'
+      const rt = Math.round(performance.now() - t0);
+      state = 'done';
+      elLast.textContent = rt + 'ms';
+      const r = duel.getBoundingClientRect();
+      popWord(r.left + r.width / 2, r.top + r.height / 2, rt < rival ? '斬!!' : 'ガキン!', true);
+      if (rt < rival) {
+        wins += 1;
+        store.set('duelWins', wins);
+        elWins.textContent = wins;
+        setStage('win', '斬', `Victory! ${rt}ms vs the rival's ${rival}ms. Tap to duel again.`);
+        sfx('slash');
+        if (rt < 250) unlock('samurai');
+      } else {
+        setStage('lose', '…', `Defeated: ${rt}ms vs the rival's ${rival}ms. Tap to duel again.`);
+        sfx('buzz');
+      }
+      if (!best || rt < best) { best = rt; store.set('bestDuel', best); elBest.textContent = best + 'ms'; }
+    };
+    // pointerdown for accurate timing; keyboard (Enter/Space) arrives as a click with detail 0
+    duel.addEventListener('pointerdown', e => { if (e.button === 0) { e.preventDefault(); strike(); } });
+    duel.addEventListener('click', e => { if (e.detail === 0) strike(); });
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden && (state === 'wait' || state === 'go')) {
+        clearTimeout(timer);
+        state = 'idle';
+        setStage('', '⚔', 'Duel paused. Tap to begin again.');
+      }
+    });
+  }
+
+  /* =========================================================
+     DEPLOY COMBO (memory sequence game)
+     ========================================================= */
+  const pad = $('#comboPad');
+  if (pad) {
+    const keys = $$('button', pad);
+    const cMsg = $('#comboMsg');
+    const cStart = $('#comboStart');
+    const elLevel = $('#comboLevel');
+    const elBest = $('#comboBest');
+    const STAGES = ['Build', 'Test', 'Ship', 'Monitor'];
+    let seq = [];
+    let pos = 0;
+    let accepting = false;
+    let run = 0; // invalidates pending timeouts from an older game
+    let best = store.get('bestCombo', 0);
+    elBest.textContent = best;
+
+    const wait = ms => new Promise(res => setTimeout(res, ms));
+    const lockPad = on => keys.forEach(k => { k.disabled = on; });
+    const flash = async (i, ms) => {
+      keys[i].classList.add('lit');
+      sfx('note', i);
+      await wait(ms);
+      keys[i].classList.remove('lit');
+    };
+    const showSequence = async id => {
+      accepting = false;
+      lockPad(true);
+      pad.classList.add('playing');
+      cMsg.textContent = `Level ${seq.length}: watch the pipeline…`;
+      const speed = Math.max(220, 520 - seq.length * 28);
+      await wait(550);
+      for (const i of seq) {
+        if (id !== run) return;
+        await flash(i, speed);
+        await wait(speed * 0.45);
+      }
+      if (id !== run) return;
+      pad.classList.remove('playing');
+      pos = 0;
+      accepting = true;
+      lockPad(false);
+      keys[0].focus({ preventScroll: true });
+      cMsg.textContent = `Your turn! Repeat ${seq.length} step${seq.length > 1 ? 's' : ''}.`;
+    };
+    const nextLevel = () => {
+      seq.push(Math.floor(Math.random() * 4));
+      showSequence(run);
+    };
+    const fail = i => {
+      accepting = false;
+      lockPad(true);
+      const cleared = seq.length - 1;
+      keys[i].classList.add('wrong');
+      setTimeout(() => keys[i].classList.remove('wrong'), 500);
+      cMsg.innerHTML = `<b>Rollback!</b> Expected <b>${STAGES[seq[pos]]}</b>. Levels cleared: <b>${cleared}</b>.`;
+      cStart.textContent = 'Redeploy ➜';
+      cStart.disabled = false;
+      sfx('buzz');
+      if (!reduceMotion) { pad.classList.remove('shake'); void pad.offsetWidth; pad.classList.add('shake'); }
+    };
+    keys.forEach((k, i) => k.addEventListener('click', () => {
+      if (!accepting) return;
+      flash(i, 180);
+      if (i !== seq[pos]) return fail(i);
+      pos += 1;
+      if (pos < seq.length) return;
+      // level cleared
+      accepting = false;
+      lockPad(true);
+      elLevel.textContent = seq.length;
+      if (seq.length > best) { best = seq.length; store.set('bestCombo', best); elBest.textContent = best; }
+      if (seq.length >= 6) unlock('pipeline');
+      cMsg.textContent = `Deployed! ✔ Level ${seq.length} cleared.`;
+      const r = pad.getBoundingClientRect();
+      if (seq.length % 3 === 0) popWord(r.left + r.width / 2, r.top + r.height / 2, 'COMBO!', true);
+      setTimeout(nextLevel, 650);
+    }));
+    cStart.addEventListener('click', () => {
+      run += 1;
+      seq = [];
+      elLevel.textContent = 0;
+      cStart.disabled = true;
+      sfx('power');
+      nextLevel();
+    });
   }
 
   /* =========================================================
