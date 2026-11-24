@@ -35,7 +35,7 @@
     </nav>
     <div class="topbar-actions">
       <button class="trophy" id="trophyBtn" type="button" aria-expanded="false" aria-controls="trophyList" title="Achievements">
-        <span aria-hidden="true">★</span><b id="trophyCount">0</b><i class="of">/11</i>
+        <span aria-hidden="true">★</span><b id="trophyCount">0</b><i class="of">/12</i>
       </button>
       <button class="ink-toggle" id="soundToggle" type="button" aria-pressed="false" aria-label="Sound effects" title="Sound effects">
         <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
@@ -524,6 +524,28 @@
               <div><dt>Best</dt><dd id="comboBest">0</dd></div>
             </dl>
             <button class="btn btn--ink btn--sm" id="comboStart" type="button">Start ➜</button>
+          </div>
+        </article>
+
+        <!-- Quest 4: typing sprint -->
+        <article class="panel mini mini--wide reveal" id="sprint">
+          <header class="mini-head">
+            <h3 class="panel-title">Quest 4 · Terminal Sprint</h3>
+            <span class="mini-kanji" aria-hidden="true">速打</span>
+          </header>
+          <p class="mini-hint">Type each command exactly and hit <b>Enter</b>. How many can you ship in <b>30 seconds</b>?</p>
+          <div class="sprint-screen">
+            <p class="sprint-cmd" id="sprintCmd" aria-live="polite"><span class="sprint-prompt" aria-hidden="true">$</span> <span id="sprintTarget">press start to boot the shell</span></p>
+            <label class="sr-only" for="sprintInput">Type the command shown</label>
+            <input class="sprint-input" id="sprintInput" type="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="…" disabled>
+          </div>
+          <div class="mini-foot">
+            <dl class="hud hud--sm">
+              <div><dt>Shipped</dt><dd id="sprintScore">0</dd></div>
+              <div><dt>Time</dt><dd id="sprintTime">30</dd></div>
+              <div><dt>Best</dt><dd id="sprintBest">0</dd></div>
+            </dl>
+            <button class="btn btn--ink btn--sm" id="sprintStart" type="button">Start ➜</button>
           </div>
         </article>
       </div>

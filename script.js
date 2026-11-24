@@ -91,6 +91,7 @@
     { id: 'slayer', name: 'Bug Slayer', desc: 'Squash 10+ bugs in one round.' },
     { id: 'samurai', name: 'Fastest Draw', desc: 'Win a duel in under 250 ms.' },
     { id: 'pipeline', name: 'Pipeline Pro', desc: 'Clear level 6 in Deploy Combo.' },
+    { id: 'typist', name: 'Keyboard Ninja', desc: 'Ship 8+ commands in one Terminal Sprint.' },
     { id: 'ink', name: 'Ink Master', desc: 'Invert the ink.' },
     { id: 'finale', name: 'To Be Continued', desc: 'Read to the very last page.' },
     { id: 'root', name: 'Root Access', desc: 'Find the one sudo command that works.', secret: true },
@@ -833,6 +834,98 @@ Opening the mission file…`);
       sfx('power');
       nextLevel();
     });
+  }
+
+  /* =========================================================
+     TERMINAL SPRINT (typing game)
+     ========================================================= */
+  const sInput = $('#sprintInput');
+  if (sInput) {
+    const CMDS = [
+      'ls -la', 'git push', 'make re', 'norminette', 'npm run build', 'git pull --rebase',
+      'docker compose up', 'python3 main.py', 'kubectl get pods', 'sudo apt update',
+      'git commit -m "fix"', 'curl localhost:8080', 'ssh deploy@prod', 'cat logs.txt | grep ERROR',
+      'pip install pandas', 'valgrind ./a.out', 'git checkout -b feature', 'chmod +x run.sh'
+    ];
+    const sTarget = $('#sprintTarget');
+    const sScreen = $('.sprint-screen');
+    const sStart = $('#sprintStart');
+    const elScore = $('#sprintScore');
+    const elTime = $('#sprintTime');
+    const elBest = $('#sprintBest');
+    const ROUND = 30;
+    let target = '';
+    let score = 0;
+    let left = ROUND;
+    let tick = null;
+    let best = store.get('bestSprint', 0);
+    elBest.textContent = best;
+
+    const pick = () => {
+      let next;
+      do { next = CMDS[Math.floor(Math.random() * CMDS.length)]; } while (next === target);
+      target = next;
+      sInput.value = '';
+      paint();
+    };
+    // colour the typed prefix green, the first mistake red
+    const paint = () => {
+      const typed = sInput.value;
+      let i = 0;
+      while (i < typed.length && i < target.length && typed[i] === target[i]) i++;
+      const wrong = i < typed.length;
+      sTarget.innerHTML =
+        `<span class="ok">${esc(target.slice(0, i))}</span>` +
+        (wrong ? `<span class="bad">${esc(target.slice(i, i + 1) || ' ')}</span>${esc(target.slice(i + 1))}` : esc(target.slice(i)));
+    };
+    const end = () => {
+      clearInterval(tick);
+      tick = null;
+      sInput.disabled = true;
+      sInput.value = '';
+      sStart.disabled = false;
+      sStart.textContent = 'Again ➜';
+      if (score > best) { best = score; store.set('bestSprint', best); elBest.textContent = best; }
+      if (score >= 8) unlock('typist');
+      sTarget.textContent = `exit 0 — shipped ${score} command${score === 1 ? '' : 's'}${score >= best && score > 0 ? ' (new best!)' : ''}`;
+      sfx('chime');
+    };
+    sInput.addEventListener('input', () => { if (tick) { paint(); sfx('key'); } });
+    sInput.addEventListener('keydown', e => {
+      if (e.key !== 'Enter' || !tick) return;
+      e.preventDefault();
+      if (sInput.value.trim() === target) {
+        score += 1;
+        elScore.textContent = score;
+        sfx('pop');
+        if (score % 5 === 0) {
+          const r = sScreen.getBoundingClientRect();
+          popWord(r.left + r.width / 2, r.top, 'SHIPPED!', true);
+        }
+        pick();
+      } else {
+        sfx('buzz');
+        if (!reduceMotion) { sScreen.classList.remove('shake'); void sScreen.offsetWidth; sScreen.classList.add('shake'); }
+      }
+    });
+    sStart.addEventListener('click', () => {
+      score = 0;
+      left = ROUND;
+      target = '';
+      elScore.textContent = 0;
+      elTime.textContent = left;
+      sStart.disabled = true;
+      sInput.disabled = false;
+      sInput.focus({ preventScroll: true });
+      pick();
+      sfx('power');
+      tick = setInterval(() => {
+        left -= 1;
+        elTime.textContent = left;
+        if (left <= 0) end();
+      }, 1000);
+    });
+    document.addEventListener('visibilitychange', () => { if (document.hidden && tick) end(); });
   }
 
   /* =========================================================
